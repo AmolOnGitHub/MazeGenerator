@@ -1,16 +1,16 @@
 import random
 
-def makeMaze(w, h):
-    actW = w * 2 + 1
+def makeMaze(size):
+    actSize = size * 2 + 1
     maze = []
-    maze.append([1 for _ in range(actW)])
-    for _ in range(h):
+    maze.append([1 for _ in range(actSize)])
+    for _ in range(size):
         l = [1]
-        for _ in range(w):
+        for _ in range(size):
             l.append(0)
             l.append(1)
         maze.append(l)
-        maze.append([1 for _ in range(actW)])
+        maze.append([1 for _ in range(actSize)])
     
     return maze
 
@@ -36,9 +36,9 @@ def coordNotSafe(coord, w, h):
         return True
     return False
 
-w, h = 9, 9
+size = 5
 
-maze = makeMaze(w, h)
+maze = makeMaze(size)
 stack = [(0, 0)]
 visited = [(0, 0)]
 
@@ -50,7 +50,7 @@ while stack != []:
     c = 0
     while c < len(neighbours):
         coord = neighbours[c]
-        if coordNotSafe(coord, w, h) or coord in visited:
+        if coordNotSafe(coord, size, size) or coord in visited:
             neighbours.remove(coord)
         else: c += 1
 
