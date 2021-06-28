@@ -1,5 +1,31 @@
 import random
-import blessed
+
+def makeMaze(w, h):
+    actW = w * 2 + 1
+    maze = []
+    maze.append([1 for _ in range(actW)])
+    for _ in range(h):
+        l = [1]
+        for _ in range(w):
+            l.append(0)
+            l.append(1)
+        maze.append(l)
+        maze.append([1 for _ in range(actW)])
+    
+    return maze
+
+def printMaze(maze):
+    for line in maze:
+        for char in line:
+            if char == 1:
+                print("⬛", end = "")
+            else: print("⬜", end = "")
+        print()
+    
+def conv(coords):
+    x = coords[0] * 2 + 1
+    y = coords[1] * 2 + 1
+    return (x, y)
 
 def coordNotSafe(coord, w, h):
     x = coord[0]
@@ -10,21 +36,9 @@ def coordNotSafe(coord, w, h):
         return True
     return False
 
-def WallsNotSafe(coord, visited):
-    x, y = coord
-    neighbours = [(x, y - 1), (x, y + 1), (x - 1, y), (x + 1, y), (x - 1, y - 1), (x + 1, y - 1), (x - 1, y + 1), (x + 1, y + 1)]
-    for neighbour in neighbours:
-        if neighbour in visited:
-            return True
-    return False
+w, h = 9, 9
 
-term = blessed.Terminal()
-
-w = 7
-h = 7
-maze = [["░" for _ in range(w)] for _ in range(h)]
-
-maze[0][0] = "█"
+maze = makeMaze(w, h)
 stack = [(0, 0)]
 visited = [(0, 0)]
 
@@ -34,29 +48,24 @@ while stack != []:
     neighbours = [(x, y - 1), (x, y + 1), (x - 1, y), (x + 1, y)]
 
     c = 0
-
-    print(term.red(str(currentCoords)))
-
     while c < len(neighbours):
         coord = neighbours[c]
-        cNS = coordNotSafe(coord, w, h)
-        ciV = coord in visited
-        wNS = WallsNotSafe(coord, visited[:-3])
-
-        print(f"{term.green(str(coord))} {cNS}, {ciV}, {wNS}")
-        if cNS or ciV or wNS:
+        if coordNotSafe(coord, w, h) or coord in visited:
             neighbours.remove(coord)
         else: c += 1
-        
-    if len(neighbours) == 0: continue
+
+    if len(neighbours) == 0: pass
     else:
         stack.append(currentCoords)
+
         new = random.choice(neighbours)
-        maze[new[0]][new[1]] = "█"
+        newC = conv(new)
+        curC = conv(currentCoords)
+        wallX = int((newC[0] + curC[0]) / 2)
+        wallY = int((newC[1] + curC[1]) / 2)
+
+        maze[wallX][wallY] = 0
         stack.append(new)
         visited.append(new)
 
-    for line in maze:
-        print("".join(line))
-
-print("terminated")
+printMaze(maze)
