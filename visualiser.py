@@ -2,7 +2,7 @@ import arcade
 import maze as mzgen
 import time
 
-SIZE = 30
+SIZE = 20
 ROW_COUNT = SIZE * 2 + 1
 COLUMN_COUNT = SIZE * 2 + 1
 
@@ -20,7 +20,7 @@ class Window(arcade.Window):
         super().__init__(width, height, title)
         arcade.set_background_color(arcade.color.BLACK)
         self.maze = mzgen.Maze(SIZE)
-        self.grid_sprite_list = arcade.SpriteList()
+        self.grid_sprite_list = [arcade.SpriteList() for _ in range(ROW_COUNT)]
 
         for row in range(ROW_COUNT):
             for column in range(COLUMN_COUNT):
@@ -28,37 +28,32 @@ class Window(arcade.Window):
                 y = MARGIN + row * HEIGHT + HEIGHT / 2 
 
                 color = arcade.color.BLACK
-                if column % 2 == 1 and row % 2 == 1: color = arcade.color.BLACK
+                if column % 2 == 1 and row % 2 == 1: color = arcade.color.WHITE
                     
-                sprite = arcade.SpriteSolidColor(WIDTH, HEIGHT, color)
+                sprite = arcade.Sprite("white.png", image_width=WIDTH, image_height=HEIGHT)
+                sprite.color = color
                 sprite.center_x = x
                 sprite.center_y = y
-                self.grid_sprite_list.append(sprite)
+                self.grid_sprite_list[row].append(sprite)
 
-    def on_update(self, delta_time: float = 0.001):
+    def on_update(self, delta_time):
         if self.maze.stack != []:
             self.maze.step()
-            self.grid_sprite_list = arcade.SpriteList()
             for row in range(ROW_COUNT):
                 for column in range(COLUMN_COUNT):
                     num = self.maze.grid[row][column]
-                    x = MARGIN + column * WIDTH + WIDTH / 2
-                    y = MARGIN + row * HEIGHT + HEIGHT / 2 
 
                     color = arcade.color.BLACK
                     if num == 0: color = arcade.color.WHITE
                     if (row, column) == self.maze.current:
                         color = arcade.color.AZURE
 
-                    sprite = arcade.SpriteSolidColor(WIDTH, HEIGHT, color)
-                    sprite.center_x = x
-                    sprite.center_y = y
+                    self.grid_sprite_list[row][column].color = color
 
-                    self.grid_sprite_list.append(sprite)
-                    
     def on_draw(self):
         arcade.start_render()
-        self.grid_sprite_list.draw()
+        for row in self.grid_sprite_list:
+            row.draw()
 
 Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
 arcade.run()
