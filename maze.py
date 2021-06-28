@@ -1,4 +1,5 @@
 import random
+import time
 
 def makeMaze(size):
     actW = size * 2 + 1
@@ -35,8 +36,10 @@ class Maze:
         self.stack = [(0, 0)]
         self.visited = [(0, 0)]
         self.current = (1, 1)
+        self.counter = 0
     
     def step(self):
+        self.counter += 1
         currentCoord = self.stack.pop()
         self.current = conv(currentCoord)
         x, y = currentCoord
@@ -71,4 +74,11 @@ class Maze:
                 else: print("⬜", end = "")
             print()
 
-mazeGen = Maze(9)
+#startTime = time.time()
+#mazeGen = Maze(30)
+#while mazeGen.stack != []:
+#    mazeGen.step()
+#mazeGen.printMaze()
+#
+#print(time.time() - startTime)
+#print(f"{mazeGen.counter} iterations.")

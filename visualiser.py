@@ -1,5 +1,6 @@
 import arcade
 import maze as mzgen
+import time
 
 SIZE = 30
 ROW_COUNT = SIZE * 2 + 1
@@ -34,12 +35,11 @@ class Window(arcade.Window):
                 sprite.center_y = y
                 self.grid_sprite_list.append(sprite)
 
-    def on_update(self, delta_time):
+    def on_update(self, delta_time: float = 0.001):
         if self.maze.stack != []:
             self.maze.step()
             self.grid_sprite_list = arcade.SpriteList()
             for row in range(ROW_COUNT):
-                row = ROW_COUNT - row - 1
                 for column in range(COLUMN_COUNT):
                     num = self.maze.grid[row][column]
                     x = MARGIN + column * WIDTH + WIDTH / 2
