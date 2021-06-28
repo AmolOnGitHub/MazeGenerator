@@ -1,16 +1,17 @@
 import random
+#import visualiser
 
 def makeMaze(size):
-    actSize = size * 2 + 1
+    actW = size * 2 + 1
     maze = []
-    maze.append([1 for _ in range(actSize)])
+    maze.append([1 for _ in range(actW)])
     for _ in range(size):
         l = [1]
         for _ in range(size):
             l.append(0)
             l.append(1)
         maze.append(l)
-        maze.append([1 for _ in range(actSize)])
+        maze.append([1 for _ in range(actW)])
     
     return maze
 
@@ -36,7 +37,7 @@ def coordNotSafe(coord, w, h):
         return True
     return False
 
-size = 5
+size = 7
 
 maze = makeMaze(size)
 stack = [(0, 0)]
@@ -69,3 +70,4 @@ while stack != []:
         visited.append(new)
 
 printMaze(maze)
+#visualiser.render(maze)
