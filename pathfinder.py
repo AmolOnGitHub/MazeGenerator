@@ -102,7 +102,7 @@ def findPath(maze, destination):
                 if not inClosed:
                     open.insert(n)
 
-    path = []
+    path = [(1, 1)]
     node = current
     while node.position != (1, 1):
         path.append(node.position)
