@@ -75,8 +75,6 @@ def findPath(maze, destination):
 
     while not open.isEmpty():
         current = open.delete()
-        xc, yc = current.position
-        maze[xc][yc] = 3
 
         if current.position == destination:
             break
@@ -104,13 +102,9 @@ def findPath(maze, destination):
                 if not inClosed:
                     open.insert(n)
 
-        maze[xc][yc] = 2
-
-    printMaze(maze)
     path = []
     node = current
     while node.position != (1, 1):
         path.append(node.position)
         node = node.parent
     return path
-

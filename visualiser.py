@@ -1,8 +1,9 @@
 import arcade
 import maze as mzgen
 import time
+import pathfinder
 
-SIZE = 10
+SIZE = 15
 ROW_COUNT = SIZE * 2 + 1
 COLUMN_COUNT = SIZE * 2 + 1
 
@@ -20,7 +21,17 @@ class Window(arcade.Window):
         super().__init__(width, height, title)
         arcade.set_background_color(arcade.color.BLACK)
         self.maze = mzgen.Maze(SIZE)
+
         self.grid_sprite_list = [arcade.SpriteList() for _ in range(ROW_COUNT)]
+
+        self.path = [] 
+        self.tempPath = []
+        self.current = None
+
+        self.maze_finished = False
+        self.start_path = False
+        self.path_finished = False
+        self.path_found = False
 
         for row in range(ROW_COUNT):
             for column in range(COLUMN_COUNT):
@@ -37,6 +48,10 @@ class Window(arcade.Window):
                 self.grid_sprite_list[row].append(sprite)
 
     def on_update(self, delta_time):
+        
+        # Maze Visualisation
+        if self.maze.stack == []:
+            self.maze_finished = True
         if self.maze.stack != []:
             self.maze.step()
             for row in range(ROW_COUNT):
@@ -50,10 +65,31 @@ class Window(arcade.Window):
 
                     self.grid_sprite_list[row][column].color = color
 
+        # Path Visualisation
+        if self.maze_finished and self.start_path and not self.path_finished:
+            if not self.path_found:
+                destination = (SIZE * 2 - 1, SIZE * 2 - 1)
+                self.path = pathfinder.findPath(self.maze.grid, destination)
+                self.tempPath = self.path
+                self.path_found = True
+            
+            if self.current is None: previous = self.tempPath[-1]
+            else: previous = self.current
+            self.current = self.tempPath.pop(-1)
+
+            self.grid_sprite_list[previous[0]][previous[1]].color = arcade.color.RED
+            self.grid_sprite_list[self.current[0]][self.current[1]].color = arcade.color.GREEN          
+
+            if len(self.tempPath) == 0: self.path_finished = True
+
     def on_draw(self):
         arcade.start_render()
         for row in self.grid_sprite_list:
             row.draw()
+
+    def on_key_press(self, symbol, modifiers):
+        if self.maze_finished and symbol == arcade.key.SPACE:
+            self.start_path = True
 
 Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
 arcade.run()
