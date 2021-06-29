@@ -64,7 +64,7 @@ class Maze:
 
             self.grid[wallX][wallY] = 0
             self.stack.append(new)
-            self.visited.append(new)
+            self.visited.append(new) 
 
     def printMaze(self):
         for line in self.grid:
@@ -73,12 +73,3 @@ class Maze:
                     print("⬛", end = "")
                 else: print("⬜", end = "")
             print()
-
-#startTime = time.time()
-#mazeGen = Maze(30)
-#while mazeGen.stack != []:
-#    mazeGen.step()
-#mazeGen.printMaze()
-#
-#print(time.time() - startTime)
-#print(f"{mazeGen.counter} iterations.")

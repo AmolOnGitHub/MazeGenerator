@@ -2,7 +2,7 @@ import arcade
 import maze as mzgen
 import time
 
-SIZE = 20
+SIZE = 10
 ROW_COUNT = SIZE * 2 + 1
 COLUMN_COUNT = SIZE * 2 + 1
 
