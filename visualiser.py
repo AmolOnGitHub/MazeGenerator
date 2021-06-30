@@ -50,7 +50,6 @@ class Window(arcade.Window):
                 self.grid_sprite_list[row].append(sprite)
 
     def on_update(self, delta_time):
-        
         # Maze Visualisation
         if self.maze.stack == []:
             self.maze_finished = True
@@ -84,6 +83,7 @@ class Window(arcade.Window):
 
             if len(self.tempPath) == 0: self.path_finished = True
         
+        # Adds gradient to path visualisation
         if self.path_finished and not self.coloring_done:
             c = 0
             l = len(self.path)
