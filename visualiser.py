@@ -3,6 +3,7 @@ import maze as mzgen
 import time
 import pathfinder
 import colorsys
+import sys
 
 SIZE = 20
 ROW_COUNT = SIZE * 2 + 1
@@ -28,6 +29,25 @@ class Window(arcade.Window):
         self.path = [] 
         self.tempPath = []
         self.current = None
+        self.destination = (SIZE * 2 - 1, SIZE * 2 - 1)
+
+        self.maze_finished = False
+        self.start_path = False
+        self.path_finished = False
+        self.path_found = False
+        self.coloring_done = False
+
+        self.reset()
+
+    def reset(self):
+        self.maze = mzgen.Maze(SIZE)
+
+        self.grid_sprite_list = [arcade.SpriteList() for _ in range(ROW_COUNT)]
+
+        self.path = [] 
+        self.tempPath = []
+        self.current = None
+        self.destination = (SIZE * 2 - 1, SIZE * 2 - 1)
 
         self.maze_finished = False
         self.start_path = False
@@ -69,8 +89,7 @@ class Window(arcade.Window):
         # Path Visualisation
         if self.maze_finished and self.start_path and not self.path_finished:
             if not self.path_found:
-                destination = (SIZE * 2 - 1, SIZE * 2 - 1)
-                self.path = pathfinder.findPath(self.maze.grid, destination)
+                self.path = pathfinder.findPath(self.maze.grid, self.destination)
                 self.tempPath = self.path.copy()
                 self.path_found = True
             
@@ -101,9 +120,15 @@ class Window(arcade.Window):
         for row in self.grid_sprite_list:
             row.draw()
 
+    #pylint: disable = attribute-defined-outside-init
     def on_key_press(self, symbol, modifiers):
         if self.maze_finished and symbol == arcade.key.SPACE:
             self.start_path = True
+        if symbol == arcade.key.R:
+            self.reset()
+        if symbol == arcade.key.Q:
+            print("\nExit requested by user\n")
+            self.close()
 
 Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
 arcade.run()
