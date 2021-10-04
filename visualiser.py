@@ -1,9 +1,7 @@
 import arcade
 import maze as mzgen
-import time
 import pathfinder
 import colorsys
-import sys
 
 SIZE = 20
 ROW_COUNT = SIZE * 2 + 1
@@ -18,6 +16,7 @@ SCREEN_WIDTH = WIDTH * COLUMN_COUNT + MARGIN * 2
 SCREEN_HEIGHT = WIDTH * COLUMN_COUNT + MARGIN * 2
 SCREEN_TITLE = "Maze Visualiser"
 
+
 class Window(arcade.Window):
     def __init__(self, width, height, title):
         super().__init__(width, height, title)
@@ -26,7 +25,7 @@ class Window(arcade.Window):
 
         self.grid_sprite_list = [arcade.SpriteList() for _ in range(ROW_COUNT)]
 
-        self.path = [] 
+        self.path = []
         self.tempPath = []
         self.current = None
         self.destination = (SIZE * 2 - 1, SIZE * 2 - 1)
@@ -44,7 +43,7 @@ class Window(arcade.Window):
 
         self.grid_sprite_list = [arcade.SpriteList() for _ in range(ROW_COUNT)]
 
-        self.path = [] 
+        self.path = []
         self.tempPath = []
         self.current = None
         self.destination = (SIZE * 2 - 1, SIZE * 2 - 1)
@@ -58,11 +57,12 @@ class Window(arcade.Window):
         for row in range(ROW_COUNT):
             for column in range(COLUMN_COUNT):
                 x = MARGIN + column * WIDTH + WIDTH / 2
-                y = MARGIN + row * HEIGHT + HEIGHT / 2 
+                y = MARGIN + row * HEIGHT + HEIGHT / 2
 
                 color = arcade.color.BLACK
-                if column % 2 == 1 and row % 2 == 1: color = arcade.color.LIGHT_GRAY
-                    
+                if column % 2 == 1 and row % 2 == 1:
+                    color = arcade.color.LIGHT_GRAY
+
                 sprite = arcade.Sprite("white.png", image_width=WIDTH, image_height=HEIGHT)
                 sprite.color = color
                 sprite.center_x = x
@@ -80,7 +80,8 @@ class Window(arcade.Window):
                     num = self.maze.grid[row][column]
 
                     color = arcade.color.BLACK
-                    if num == 0: color = arcade.color.LIGHT_GRAY
+                    if num == 0:
+                        color = arcade.color.LIGHT_GRAY
                     if (row, column) == self.maze.current:
                         color = arcade.color.BLUEBERRY
 
@@ -92,16 +93,19 @@ class Window(arcade.Window):
                 self.path = pathfinder.findPath(self.maze.grid, self.destination)
                 self.tempPath = self.path.copy()
                 self.path_found = True
-            
-            if self.current is None: previous = self.tempPath[-1]
-            else: previous = self.current
+
+            if self.current is None:
+                previous = self.tempPath[-1]
+            else:
+                previous = self.current
             self.current = self.tempPath.pop(-1)
 
             self.grid_sprite_list[previous[0]][previous[1]].color = (237, 47, 47)
-            self.grid_sprite_list[self.current[0]][self.current[1]].color = (66, 245, 78)         
+            self.grid_sprite_list[self.current[0]][self.current[1]].color = (66, 245, 78)
 
-            if len(self.tempPath) == 0: self.path_finished = True
-        
+            if len(self.tempPath) == 0:
+                self.path_finished = True
+
         # Adds gradient to path visualisation
         if self.path_finished and not self.coloring_done:
             c = 0
@@ -114,13 +118,12 @@ class Window(arcade.Window):
                 self.grid_sprite_list[x][y].color = colorRGB
                 c += 1
             self.coloring_done = True
-            
+
     def on_draw(self):
         arcade.start_render()
         for row in self.grid_sprite_list:
             row.draw()
 
-    #pylint: disable = attribute-defined-outside-init
     def on_key_press(self, symbol, modifiers):
         if self.maze_finished and symbol == arcade.key.SPACE:
             self.start_path = True
@@ -129,6 +132,7 @@ class Window(arcade.Window):
         if symbol == arcade.key.Q:
             print("\nExit requested by user\n")
             self.close()
+
 
 Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
 arcade.run()
