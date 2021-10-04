@@ -12,7 +12,7 @@ HEIGHT = 800 // COLUMN_COUNT
 
 MARGIN = 5
 
-SCREEN_WIDTH = WIDTH * COLUMN_COUNT + MARGIN * 2
+SCREEN_WIDTH = WIDTH * COLUMN_COUNT + MARGIN * 2 
 SCREEN_HEIGHT = WIDTH * COLUMN_COUNT + MARGIN * 2
 SCREEN_TITLE = "Maze Visualiser"
 
@@ -41,7 +41,7 @@ class Window(arcade.Window):
     def reset(self):
         self.maze = mzgen.Maze(SIZE)
 
-        self.grid_sprite_list = [arcade.SpriteList() for _ in range(ROW_COUNT)]
+        self.grid_sprite_list = [arcade.SpriteList(is_static=True) for _ in range(ROW_COUNT)]
 
         self.path = []
         self.tempPath = []
@@ -63,7 +63,7 @@ class Window(arcade.Window):
                 if column % 2 == 1 and row % 2 == 1:
                     color = arcade.color.LIGHT_GRAY
 
-                sprite = arcade.Sprite("white.png", image_width=WIDTH, image_height=HEIGHT)
+                sprite = arcade.Sprite("resources/images/white.png", image_width=WIDTH, image_height=HEIGHT)
                 sprite.color = color
                 sprite.center_x = x
                 sprite.center_y = y
