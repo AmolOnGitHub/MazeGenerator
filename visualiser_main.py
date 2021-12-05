@@ -3,7 +3,7 @@ import maze as mzgen
 import pathfinder
 import colorsys
 
-SIZE = 20
+SIZE = 15
 ROW_COUNT = SIZE * 2 + 1
 COLUMN_COUNT = SIZE * 2 + 1
 
@@ -23,7 +23,7 @@ class Window(arcade.Window):
         arcade.set_background_color(arcade.color.BLACK)
         self.maze = mzgen.Maze(SIZE)
 
-        self.grid_sprite_list = [arcade.SpriteList() for _ in range(ROW_COUNT)]
+        self.grid_sprite_list = [arcade.SpriteList(is_static=True) for _ in range(ROW_COUNT)]
 
         self.path = []
         self.tempPath = []
@@ -41,7 +41,7 @@ class Window(arcade.Window):
     def reset(self):
         self.maze = mzgen.Maze(SIZE)
 
-        self.grid_sprite_list = [arcade.SpriteList(is_static=True) for _ in range(ROW_COUNT)]
+        self.grid_sprite_list = [arcade.SpriteList() for _ in range(ROW_COUNT)]
 
         self.path = []
         self.tempPath = []
